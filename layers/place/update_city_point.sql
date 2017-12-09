@@ -50,6 +50,9 @@ $$ LANGUAGE plpgsql;
 
 SELECT update_osm_city_point();
 
+-- delete zero-length english names
+update osm_city_point set name_en = null where length(name_en) = 0;
+
 CREATE INDEX IF NOT EXISTS osm_city_point_rank_idx ON osm_city_point("rank");
 
 -- Handle updates
