@@ -10,6 +10,26 @@ name_de_field: &name_de
   name: name_de
   key: name:de
   type: string
+name_de_field: &name_fr
+  name: name_fr
+  key: name:fr
+  type: string
+name_de_field: &name_it
+  name: name_it
+  key: name:it
+  type: string
+name_de_field: &name_es
+  name: name_es
+  key: name:es
+  type: string
+name_de_field: &name_nl
+  name: name_nl
+  key: name:nl
+  type: string
+name_de_field: &name_ru
+  name: name_ru
+  key: name:ru
+  type: string
 rank_field: &rank
   name: rank
   key: rank
@@ -28,6 +48,11 @@ tables:
     - *name
     - *name_en
     - *name_de
+    - *name_fr
+    - *name_it
+    - *name_es
+    - *name_nl
+    - *name_ru
     - name: tags
       type: hstore_tags
     filters:
@@ -48,6 +73,11 @@ tables:
     - *name
     - *name_en
     - *name_de
+    - *name_fr
+    - *name_it
+    - *name_es
+    - *name_nl
+    - *name_ru
     - *rank
     - name: country_code_iso3166_1_alpha_2
       key: country_code_iso3166_1_alpha_2
@@ -82,6 +112,11 @@ tables:
     - *name
     - *name_en
     - *name_de
+    - *name_fr
+    - *name_it
+    - *name_es
+    - *name_nl
+    - *name_ru
     - name: tags
       type: hstore_tags
     - *rank
@@ -103,6 +138,11 @@ tables:
     - *name
     - *name_en
     - *name_de
+    - *name_fr
+    - *name_it
+    - *name_es
+    - *name_nl
+    - *name_ru
     - name: tags
       type: hstore_tags
     - *rank
@@ -124,6 +164,11 @@ tables:
     - *name
     - *name_en
     - *name_de
+    - *name_fr
+    - *name_it
+    - *name_es
+    - *name_nl
+    - *name_ru
     - name: tags
       type: hstore_tags
     - name: is_in_country
@@ -154,6 +199,11 @@ tables:
     - *name
     - *name_en
     - *name_de
+    - *name_fr
+    - *name_it
+    - *name_es
+    - *name_nl
+    - *name_ru
     - name: tags
       type: hstore_tags
     - name: place
