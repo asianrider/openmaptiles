@@ -113,7 +113,7 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text,
     -- etldoc: layer_city          -> layer_place:z8_11
     -- etldoc: layer_city          -> layer_place:z12_14
     SELECT
-        osm_id*10, geometry, name, name_en, name_de, name_fr,
+        osm_id*10, geometry, name, name_en, name_de, name_fr, name_it, name_es, name_nl, name_ru,
         tags,
         place::text AS class, "rank", capital,
         NULL::text AS iso_a2
