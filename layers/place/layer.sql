@@ -4,7 +4,7 @@
 
 CREATE OR REPLACE FUNCTION layer_place(bbox geometry, zoom_level int, pixel_width numeric)
 RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text,
-    name_de text, name_fr text, tags hstore, class text, "rank" int, capital INT, iso_a2
+    name_de text, name_fr text, name_it text, name_es text, name_nl text, name_ru text, tags hstore, class text, "rank" int, capital INT, iso_a2
         TEXT) AS $$
 
     -- etldoc: osm_continent_point -> layer_place:z0_3
