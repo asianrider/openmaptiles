@@ -42,3 +42,13 @@ CREATE OR REPLACE FUNCTION service_value(service TEXT) RETURNS TEXT AS $$
         ELSE NULL
     END;
 $$ LANGUAGE SQL IMMUTABLE STRICT;
+
+CREATE OR REPLACE FUNCTION surface_value(surface TEXT) RETURNS TEXT AS $$
+    SELECT CASE
+      WHEN surface IN ('paved', 'asphalt', 'sett', 'concrete', 'paving_stones', 'cobblestone', 'metal', 'wood') THEN 'paved'
+      WHEN surface IN ('unpaved', 'compacted', 'dirt', 'earth', 'grass', 'grass_paver', 'gravel_turf', 'fine_gravel', 'gravel', 'ground', 'mud', 'pebblestone', 'salt', 'woodchips') THEN 'unpaved'
+      WHEN surface = 'sand' THEN 'sand'
+      WHEN surface IN ('ice', 'snow') then 'ice'
+        ELSE NULL
+    END;
+$$ LANGUAGE SQL IMMUTABLE STRICT;

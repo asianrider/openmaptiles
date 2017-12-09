@@ -43,13 +43,13 @@ generalized_tables:
 # etldoc: imposm3 -> osm_highway_linestring_gen2
   highway_linestring_gen2:
     source: highway_linestring_gen1
-    sql_filter: highway IN ('motorway', 'trunk', 'primary', 'secondary', 'motorway_link', 'trunk_link', 'primary_link', 'secondary_link') AND NOT is_area
+    sql_filter: highway IN ('motorway', 'trunk', 'primary', 'secondary', 'tertiary', 'road', 'unclassified', 'motorway_link', 'trunk_link', 'primary_link', 'secondary_link', 'tertiary_link') AND NOT is_area
     tolerance: ZRES11
 
 # etldoc: imposm3 -> osm_highway_linestring_gen1
   highway_linestring_gen1:
     source: highway_linestring
-    sql_filter: highway IN ('motorway', 'trunk', 'primary', 'secondary', 'tertiary', 'motorway_link', 'trunk_link', 'primary_link', 'secondary_link', 'tertiary_link') AND NOT is_area
+    sql_filter: highway IN ('motorway', 'trunk', 'primary', 'secondary', 'tertiary', 'motorway_link', 'trunk_link', 'primary_link', 'secondary_link', 'tertiary_link', 'track', 'road', 'unclassified') AND NOT is_area
     tolerance: ZRES12
 
 name_field: &name
@@ -63,6 +63,10 @@ name_en_field: &name_en
 name_de_field: &name_de
   name: name_de
   key: name:de
+  type: string
+name_de_field: &name_fr
+  name: name_fr
+  key: name:fr
   type: string
 short_name_field: &short_name
   key: short_name
@@ -149,6 +153,7 @@ tables:
     - *name
     - *name_en
     - *name_de
+    - *name_fr
     - *short_name
     - *tunnel
     - *bridge
@@ -159,6 +164,9 @@ tables:
     - *service
     - *usage
     - *public_transport
+    - name: surface
+      type: string
+      key: surface
     mapping:
       highway:
       - motorway

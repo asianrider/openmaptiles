@@ -88,6 +88,13 @@ layer:
       - driveway
       - alley
       - parking_aisle
+    surface:
+      description: OSM tags
+      values:
+        - paved
+        - unpaved
+        - sand
+        - ice
     level:
       description: |
           Experimental feature! Filled only for steps and footways. Original
@@ -105,7 +112,7 @@ layer:
   datasource:
     geometry_field: geometry
     srid: 900913
-    query: (SELECT geometry, class, subclass, oneway, ramp, brunnel, service, layer, level, indoor FROM layer_transportation(!bbox!, z(!scale_denominator!))) AS t
+    query: (SELECT geometry, class, subclass, oneway, ramp, brunnel, service, surface, layer, level, indoor FROM layer_transportation(!bbox!, z(!scale_denominator!))) AS t
 schema:
   - ./class.sql
   - ./update_transportation_merge.sql
