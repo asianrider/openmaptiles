@@ -155,6 +155,7 @@ else
     echo " "
     echo "-------------------------------------------------------------------------------------"
     echo "====> : The testdata ./data/$testdata exists, we don't need to download! "
+    ./make-config.sh ${osm_area}
 fi
 
 
