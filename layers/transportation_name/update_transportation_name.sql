@@ -48,7 +48,7 @@ CREATE MATERIALIZED VIEW osm_transportation_name_linestring AS (
         NULL::bigint AS osm_id,
         name,
         name_en,
-        name_de,
+        name_de, name_fr, name_it, name_es, name_nl, name_ru,
         get_basic_names(delete_empty_keys(hstore(ARRAY['name',name,'name:en',name_en,'name:de',name_de])), geometry)
             || delete_empty_keys(hstore(ARRAY['name',name,'name:en',name_en,'name:de',name_de]))
             AS "tags",
@@ -64,7 +64,7 @@ CREATE MATERIALIZED VIEW osm_transportation_name_linestring AS (
           ST_LineMerge(ST_Collect(geometry)) AS geometry,
           name,
           name_en,
-          name_de,
+          name_de, name_fr, name_it, name_es, name_nl, name_ru,
           ref,
           highway,
           "level",
