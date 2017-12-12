@@ -32,8 +32,13 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, name_de
         ELSE osm_id*10+1
     END AS osm_id_hash,
     geometry, name,
-    COALESCE(NULLIF(name_en, ''), name) AS name_en,
-    COALESCE(NULLIF(name_de, ''), name, name_en) AS name_de,
+    COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
+    COALESCE(NULLIF(name_de, ''), tags->'name:latin', name) AS name_de,
+    COALESCE(NULLIF(name_fr, ''), tags->'name:latin', name) AS name_fr,
+    COALESCE(NULLIF(name_it, ''), tags->'name:latin', name) AS name_it,
+    COALESCE(NULLIF(name_es, ''), tags->'name:latin', name) AS name_es,
+    COALESCE(NULLIF(name_nl, ''), tags->'name:latin', name) AS name_nl,
+    COALESCE(NULLIF(name_ru, ''), tags->'name:latin', name) AS name_ru,
     tags,
     'lake'::text AS class
     FROM osm_water_point
