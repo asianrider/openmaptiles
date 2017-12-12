@@ -33,7 +33,7 @@ generalized_tables:
 # etldoc: imposm3 -> osm_shipway_linestring_gen2
   shipway_linestring_gen2:
     source: shipway_linestring_gen1
-    tolerance: ZRES12
+    tolerance: ZRES9
 
 # etldoc: imposm3 -> osm_shipway_linestring_gen1
   shipway_linestring_gen1:

@@ -301,7 +301,7 @@ indoor INT, surface TEXT) AS $$
             z_order,
             NULL AS surface
         FROM osm_shipway_linestring_gen2
-        WHERE zoom_level = 11
+        WHERE zoom_level = 8
         UNION ALL
 
         -- etldoc: osm_shipway_linestring_gen1  ->  layer_transportation:z12
@@ -314,7 +314,7 @@ indoor INT, surface TEXT) AS $$
             z_order,
             NULL AS surface
         FROM osm_shipway_linestring_gen1
-        WHERE zoom_level = 12
+        WHERE zoom_level BETWEEN 9 AND 12
         UNION ALL
 
         -- etldoc: osm_shipway_linestring       ->  layer_transportation:z13
