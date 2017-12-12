@@ -16,6 +16,11 @@ CREATE MATERIALIZED VIEW osm_transportation_name_network AS (
       CASE WHEN length(hl.name)>15 THEN osml10n_street_abbrev_all(hl.name) ELSE hl.name END AS "name",
       CASE WHEN length(hl.name_en)>15 THEN osml10n_street_abbrev_en(hl.name_en) ELSE hl.name_en END AS "name_en",
       CASE WHEN length(hl.name_de)>15 THEN osml10n_street_abbrev_de(hl.name_de) ELSE hl.name_de END AS "name_de",
+      CASE WHEN length(hl.name_fr)>15 THEN osml10n_street_abbrev_de(hl.name_fr) ELSE hl.name_de END AS "name_fr",
+      CASE WHEN length(hl.name_it)>15 THEN osml10n_street_abbrev_de(hl.name_it) ELSE hl.name_de END AS "name_it",
+      CASE WHEN length(hl.name_es)>15 THEN osml10n_street_abbrev_de(hl.name_es) ELSE hl.name_de END AS "name_es",
+      CASE WHEN length(hl.name_nl)>15 THEN osml10n_street_abbrev_de(hl.name_nl) ELSE hl.name_de END AS "name_nl",
+      CASE WHEN length(hl.name_ru)>15 THEN osml10n_street_abbrev_de(hl.name_ru) ELSE hl.name_de END AS "name_ru",
       rm.network_type,
       CASE
         WHEN (rm.network_type is not null AND nullif(rm.ref::text, '') is not null)
