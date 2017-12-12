@@ -25,7 +25,7 @@ layer:
     key_field: osm_id
     key_field_as_attribute: no
     srid: 900913
-    query: (SELECT osm_id, geometry, name, name_en, name_de, {name_languages}, class FROM layer_water_name(!bbox!, z(!scale_denominator!))) AS t
+    query: (SELECT osm_id, geometry, name, name_en, name_de, name_fr, name_it, name_es, name_nl, name_ru, class FROM layer_water_name(!bbox!, z(!scale_denominator!))) AS t
 schema:
   - ./update_marine_point.sql
   - ./update_water_lakeline.sql

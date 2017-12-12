@@ -3,7 +3,7 @@
 -- etldoc:     label="layer_water_name | <z0_8> z0_8 | <z9_13> z9_13 | <z14_> z14+" ] ;
 
 CREATE OR REPLACE FUNCTION layer_water_name(bbox geometry, zoom_level integer)
-RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, name_de text, tags hstore, class text) AS $$
+RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, name_de text, name_fr text, name_it text, name_es text, name_nl text, name_ru text, tags hstore, class text) AS $$
     -- etldoc: osm_water_lakeline ->  layer_water_name:z9_13
     -- etldoc: osm_water_lakeline ->  layer_water_name:z14_
     SELECT
