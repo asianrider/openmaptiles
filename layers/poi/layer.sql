@@ -3,10 +3,15 @@
 -- etldoc:     label="layer_poi | <z12> z12 | <z13> z13 | <z14_> z14+" ] ;
 
 CREATE OR REPLACE FUNCTION layer_poi(bbox geometry, zoom_level integer, pixel_width numeric)
-RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, name_de text, tags hstore, class text, subclass text, agg_stop integer, "rank" int) AS $$
+RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, name_de text, name_fr text, name_it text, name_es text, name_nl text, name_ru text, tags hstore, class text, subclass text, agg_stop integer, "rank" int) AS $$
     SELECT osm_id_hash AS osm_id, geometry, NULLIF(name, '') AS name,
-        COALESCE(NULLIF(name_en, ''), name) AS name_en,
-        COALESCE(NULLIF(name_de, ''), name, name_en) AS name_de,
+        COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
+        COALESCE(NULLIF(name_de, ''), tags->'name:latin', name) AS name_de,
+        COALESCE(NULLIF(name_fr, ''), tags->'name:latin', name) AS name_fr,
+        COALESCE(NULLIF(name_it, ''), tags->'name:latin', name) AS name_it,
+        COALESCE(NULLIF(name_es, ''), tags->'name:latin', name) AS name_es,
+        COALESCE(NULLIF(name_nl, ''), tags->'name:latin', name) AS name_nl,
+        COALESCE(NULLIF(name_ru, ''), tags->'name:latin', name) AS name_ru,
         tags,
         poi_class(subclass, mapping_key) AS class,
         CASE
