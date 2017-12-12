@@ -64,9 +64,25 @@ name_de_field: &name_de
   name: name_de
   key: name:de
   type: string
-name_de_field: &name_fr
+name_fr_field: &name_fr
   name: name_fr
   key: name:fr
+  type: string
+name_it_field: &name_it
+  name: name_it
+  key: name:it
+  type: string
+name_es_field: &name_es
+  name: name_es
+  key: name:es
+  type: string
+name_nl_field: &name_nl
+  name: name_nl
+  key: name:nl
+  type: string
+name_ru_field: &name_ru
+  name: name_ru
+  key: name:ru
   type: string
 short_name_field: &short_name
   key: short_name
@@ -154,6 +170,10 @@ tables:
     - *name_en
     - *name_de
     - *name_fr
+    - *name_it
+    - *name_es
+    - *name_nl
+    - *name_ru
     - *short_name
     - *tunnel
     - *bridge
@@ -216,6 +236,11 @@ tables:
     - *name
     - *name_en
     - *name_de
+    - *name_fr
+    - *name_it
+    - *name_es
+    - *name_nl
+    - *name_ru
     - *short_name
     - *tunnel
     - *bridge
@@ -252,6 +277,11 @@ tables:
     - *name
     - *name_en
     - *name_de
+    - *name_fr
+    - *name_it
+    - *name_es
+    - *name_nl
+    - *name_ru
     - *short_name
     - *tunnel
     - *bridge
@@ -281,6 +311,11 @@ tables:
     - *name
     - *name_en
     - *name_de
+    - *name_fr
+    - *name_it
+    - *name_es
+    - *name_nl
+    - *name_ru
     - *short_name
     - *tunnel
     - *bridge
