@@ -147,6 +147,8 @@ start-tileserver:
 	@echo "* "
 	@echo "***********************************************************"
 	@echo " "
+	cp config.json data/
+	cp osm-liberty.json data/
 	docker run -it --rm -v $$(pwd)/data:/data -p 8080:80 klokantech/tileserver-gl
 
 start-mapbox-studio:
