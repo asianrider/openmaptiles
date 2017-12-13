@@ -5,7 +5,7 @@
 CREATE OR REPLACE FUNCTION layer_mountain_peak(bbox geometry, zoom_level integer, pixel_width numeric)
 RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, name_de text, name_fr text, name_it text, name_es text, name_nl text, name_ru text, tags hstore, ele int, ele_ft int, "rank" int) AS $$
    -- etldoc: osm_peak_point -> layer_mountain_peak:z7_
-   SELECT osm_id, geometry, name, name_en, name_de, tags, ele::int, ele_ft::int, rank::int
+   SELECT osm_id, geometry, name, name_en, name_de, name_fr, name_it, name_es, name_nl, name_ru, tags, ele::int, ele_ft::int, rank::int
    FROM (
      SELECT osm_id, geometry, name,
      COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
