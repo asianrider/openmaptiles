@@ -1,6 +1,8 @@
 DROP TRIGGER IF EXISTS trigger_flag_transportation_name ON osm_highway_linestring;
 DROP TRIGGER IF EXISTS trigger_refresh ON transportation_name.updates;
 
+update osm_highway_linestring set name_en = null where length(name_en) = 0;
+
 -- Instead of using relations to find out the road names we
 -- stitch together the touching ways with the same name
 -- to allow for nice label rendering
