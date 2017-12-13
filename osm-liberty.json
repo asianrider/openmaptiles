@@ -22,10 +22,10 @@
     },
     "u88szdde1": {
       "type": "vector",
-      "tiles": [
+      "tiles_local": [
         "http://localhost:8080/data/v3/{z}/{x}/{y}.pbf"
       ],
-      "tiles_remote": [
+      "tiles": [
         "http://165.227.154.120:8080/data/v3/{z}/{x}/{y}.pbf"
       ],
       "minZoom": 0,
@@ -3127,7 +3127,7 @@
         ]
       ],
       "layout": {
-        "text-field": "{name}",
+        "text-field": "{name_fr}",
         "text-font": [
           "Roboto Regular"
         ],
@@ -3154,7 +3154,7 @@
         "Point"
       ],
       "layout": {
-        "text-field": "{name}",
+        "text-field": "{name_fr}",
         "text-font": [
           "Roboto Regular"
         ],
@@ -3190,7 +3190,7 @@
       "layout": {
         "icon-image": "{class}_11",
         "text-anchor": "top",
-        "text-field": "{name}",
+        "text-field": "{name_fr}",
         "text-font": [
           "Roboto Condensed Italic"
         ],
@@ -3237,7 +3237,7 @@
       "layout": {
         "icon-image": "{class}_11",
         "text-anchor": "top",
-        "text-field": "{name}",
+        "text-field": "{name_fr}",
         "text-font": [
           "Roboto Condensed Italic"
         ],
@@ -3284,7 +3284,7 @@
       "layout": {
         "icon-image": "{class}_11",
         "text-anchor": "top",
-        "text-field": "{name}",
+        "text-field": "{name_fr}",
         "text-font": [
           "Roboto Condensed Italic"
         ],
@@ -3354,7 +3354,7 @@
       "layout": {
         "symbol-placement": "line",
         "text-anchor": "center",
-        "text-field": "{name}",
+        "text-field": "{name_fr}",
         "text-font": [
           "Roboto Regular"
         ],
