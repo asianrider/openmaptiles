@@ -28,7 +28,7 @@ layer:
       - ditch
   datasource:
     geometry_field: geometry
-    query: (SELECT geometry, name, name_en, name_de, name_fr, name_it, name_es, name_nl, name_ru, class FROM layer_waterway(!bbox!, z(!scale_denominator!))) AS t
+    query: (SELECT geometry, name, name_en, name_de, name_fr, name_it, name_es, name_nl, name_ru, {name_languages}, class FROM layer_waterway(!bbox!, z(!scale_denominator!))) AS t
 schema:
   - ./update_waterway_linestring.sql
   - ./update_important_waterway.sql
