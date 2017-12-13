@@ -12,8 +12,6 @@ CREATE MATERIALIZED VIEW osm_water_point AS (
         update_tags(wp.tags, ST_Centroid(wp.geometry)) AS tags,
         ST_Area(wp.geometry) AS area
     FROM osm_water_polygon AS wp
-    LEFT JOIN lake_centerline ll ON wp.osm_id = ll.osm_id
-    WHERE ll.osm_id IS NULL AND wp.name <> ''
 );
 CREATE INDEX IF NOT EXISTS osm_water_point_geometry_idx ON osm_water_point USING gist (geometry);
 
