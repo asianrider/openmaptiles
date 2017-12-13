@@ -22,7 +22,7 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, name_de
     'lake'::text AS class
     FROM osm_water_lakeline
     WHERE geometry && bbox
-      AND ((zoom_level BETWEEN 9 AND 13 AND LineLabel(zoom_level, NULLIF(name, ''), geometry))
+      AND ((zoom_level BETWEEN 6 AND 13 AND LineLabel(zoom_level, NULLIF(name, ''), geometry))
         OR (zoom_level >= 14))
     -- etldoc: osm_water_point ->  layer_water_name:z9_13
     -- etldoc: osm_water_point ->  layer_water_name:z14_
