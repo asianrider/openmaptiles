@@ -7,9 +7,9 @@ DROP MATERIALIZED VIEW IF EXISTS  osm_water_point CASCADE;
 
 CREATE MATERIALIZED VIEW osm_water_point AS (
     SELECT
-        wp.osm_id, ST_PointOnSurface(wp.geometry) AS geometry,
+        wp.osm_id, ST_Centroid(wp.geometry) AS geometry,
         wp.name, wp.name_en, wp.name_de, wp.name_fr, wp.name_it, wp.name_es, wp.name_nl, wp.name_ru,
-        update_tags(wp.tags, ST_PointOnSurface(wp.geometry)) AS tags,
+        update_tags(wp.tags, ST_Centroid(wp.geometry)) AS tags,
         ST_Area(wp.geometry) AS area
     FROM osm_water_polygon AS wp
     LEFT JOIN lake_centerline ll ON wp.osm_id = ll.osm_id
