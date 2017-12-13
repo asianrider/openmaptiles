@@ -3,13 +3,18 @@
 -- etldoc:     style="rounded,filled", label="layer_mountain_peak | <z7_> z7+" ] ;
 
 CREATE OR REPLACE FUNCTION layer_mountain_peak(bbox geometry, zoom_level integer, pixel_width numeric)
-RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, name_de text, tags hstore, ele int, ele_ft int, "rank" int) AS $$
+RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, name_de text, name_fr text, name_it text, name_es text, name_nl text, name_ru text, tags hstore, ele int, ele_ft int, "rank" int) AS $$
    -- etldoc: osm_peak_point -> layer_mountain_peak:z7_
    SELECT osm_id, geometry, name, name_en, name_de, tags, ele::int, ele_ft::int, rank::int
    FROM (
      SELECT osm_id, geometry, name,
-     COALESCE(NULLIF(name_en, ''), name) AS name_en,
-     COALESCE(NULLIF(name_de, ''), name, name_en) AS name_de,
+     COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
+     COALESCE(NULLIF(name_de, ''), tags->'name:latin', name) AS name_de,
+     COALESCE(NULLIF(name_fr, ''), tags->'name:latin', name) AS name_fr,
+     COALESCE(NULLIF(name_it, ''), tags->'name:latin', name) AS name_it,
+     COALESCE(NULLIF(name_es, ''), tags->'name:latin', name) AS name_es,
+     COALESCE(NULLIF(name_nl, ''), tags->'name:latin', name) AS name_nl,
+     COALESCE(NULLIF(name_ru, ''), name) AS name_ru,
      tags,
      substring(ele from E'^(-?\\d+)(\\D|$)')::int AS ele,
      round(substring(ele from E'^(-?\\d+)(\\D|$)')::int*3.2808399)::int AS ele_ft,
