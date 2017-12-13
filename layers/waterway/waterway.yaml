@@ -12,6 +12,11 @@ layer:
         The `name` field may be empty for NaturalEarth data or at lower zoom levels.
     name_en: English name `name:en` if available, otherwise `name`.
     name_de: German name `name:de` if available, otherwise `name` or `name:en`.
+    name_fr: French name, otherwise name:en, or name
+    name_it: Italian name, otherwise name:en, or name
+    name_es: Spanish name, otherwise name:en, or name
+    name_nl: Dutch name, otherwise name:en, or name
+    name_ru: Russian name, otherwise name:en, or name
     class:
       description: |
         The original value of the [`waterway`](http://wiki.openstreetmap.org/wiki/Key:waterway) tag.
