@@ -16,6 +16,11 @@ CREATE MATERIALIZED VIEW osm_transportation_name_network AS (
       CASE WHEN length(hl.name)>15 THEN osml10n_street_abbrev_all(hl.name) ELSE hl.name END AS "name",
       CASE WHEN length(hl.name_en)>15 THEN osml10n_street_abbrev_en(hl.name_en) ELSE hl.name_en END AS "name_en",
       CASE WHEN length(hl.name_de)>15 THEN osml10n_street_abbrev_de(hl.name_de) ELSE hl.name_de END AS "name_de",
+      CASE WHEN length(hl.name_fr)>15 THEN osml10n_street_abbrev_de(hl.name_fr) ELSE hl.name_fr END AS "name_fr",
+      CASE WHEN length(hl.name_it)>15 THEN osml10n_street_abbrev_de(hl.name_it) ELSE hl.name_it END AS "name_it",
+      CASE WHEN length(hl.name_es)>15 THEN osml10n_street_abbrev_de(hl.name_es) ELSE hl.name_es END AS "name_es",
+      CASE WHEN length(hl.name_nl)>15 THEN osml10n_street_abbrev_de(hl.name_nl) ELSE hl.name_nl END AS "name_nl",
+      CASE WHEN length(hl.name_ru)>15 THEN osml10n_street_abbrev_de(hl.name_ru) ELSE hl.name_ru END AS "name_ru",
       rm.network_type,
       CASE
         WHEN (rm.network_type is not null AND nullif(rm.ref::text, '') is not null)
@@ -48,7 +53,7 @@ CREATE MATERIALIZED VIEW osm_transportation_name_linestring AS (
         NULL::bigint AS osm_id,
         name,
         name_en,
-        name_de,
+        name_de, name_fr, name_it, name_es, name_nl, name_ru,
         get_basic_names(delete_empty_keys(hstore(ARRAY['name',name,'name:en',name_en,'name:de',name_de])), geometry)
             || delete_empty_keys(hstore(ARRAY['name',name,'name:en',name_en,'name:de',name_de]))
             AS "tags",
@@ -64,7 +69,7 @@ CREATE MATERIALIZED VIEW osm_transportation_name_linestring AS (
           ST_LineMerge(ST_Collect(geometry)) AS geometry,
           name,
           name_en,
-          name_de,
+          name_de, name_fr, name_it, name_es, name_nl, name_ru,
           ref,
           highway,
           "level",
@@ -76,7 +81,7 @@ CREATE MATERIALIZED VIEW osm_transportation_name_linestring AS (
       WHERE ("rank"=1 OR "rank" is null)
         AND (name <> '' OR ref <> '')
         AND NULLIF(highway, '') IS NOT NULL
-      group by name, name_en, name_de, ref, highway, "level", layer, indoor, network_type
+      group by name, name_en, name_de, name_de, name_fr, name_it, name_es, name_nl, name_ru, ref, highway, "level", layer, indoor, network_type
     ) AS highway_union
 );
 CREATE INDEX IF NOT EXISTS osm_transportation_name_linestring_geometry_idx ON osm_transportation_name_linestring USING gist(geometry);
