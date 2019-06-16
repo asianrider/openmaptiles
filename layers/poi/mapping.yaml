@@ -12,6 +12,7 @@ def_poi_mapping_amenity: &poi_mapping_amenity
   - bank
   - bar
   - bbq
+  - bicycle_parking
   - bicycle_rental
   - biergarten
   - bus_station
@@ -35,8 +36,10 @@ def_poi_mapping_amenity: &poi_mapping_amenity
   - kindergarten
   - library
   - marketplace
+  - motorcycle_parking
   - nightclub
   - nursing_home
+  - parking
   - pharmacy
   - place_of_worship
   - police
@@ -70,6 +73,10 @@ def_poi_mapping_barrier: &poi_mapping_barrier
   - stile
   - toll_booth
 
+# building values , see http://taginfo.openstreetmap.org/keys/building#values
+def_poi_mapping_building: &poi_mapping_building
+  - dormitory
+
 # highway values , see http://taginfo.openstreetmap.org/keys/highway#values
 def_poi_mapping_highway: &poi_mapping_highway
   - bus_stop
@@ -86,13 +93,16 @@ def_poi_mapping_landuse: &poi_mapping_landuse
   - brownfield
   - cemetery
   - reservoir
+  - winter_sports
 
 # leisure values , see http://taginfo.openstreetmap.org/keys/leisure#values
 def_poi_mapping_leisure: &poi_mapping_leisure
   - dog_park
+  - escape_game
   - garden
   - golf_course
   - ice_rink
+  - hackerspace
   - marina
   - miniature_golf
   - park
@@ -106,8 +116,10 @@ def_poi_mapping_leisure: &poi_mapping_leisure
 
 # railway values , see http://taginfo.openstreetmap.org/keys/railway#values
 def_poi_mapping_railway: &poi_mapping_railway
-  - station
   - halt
+  - station
+  - subway_entrance
+  - train_station_entrance
   - tram_stop
 
 # shop values , see http://taginfo.openstreetmap.org/keys/shop#values
@@ -148,6 +160,7 @@ def_poi_mapping_shop: &poi_mapping_shop
   - erotic
   - fabric
   - florist
+  - frozen_food
   - furniture
   - garden_centre
   - general
@@ -278,6 +291,7 @@ def_poi_mapping_sport: &poi_mapping_sport
 # tourism values , see http://taginfo.openstreetmap.org/keys/tourism#values
 def_poi_mapping_tourism: &poi_mapping_tourism
   - alpine_hut
+  - aquarium
   - artwork
   - attraction
   - bed_and_breakfast
@@ -351,10 +365,26 @@ tables:
     - name: uic_ref
       key: uic_ref
       type: string
+    - name: religion
+      key: religion
+      type: string
+    - name: level
+      key: level
+      type: integer
+    - name: indoor
+      key: indoor
+      type: bool
+    - name: layer
+      key: layer
+      type: integer
+    - name: sport
+      key: sport
+      type: string
     mapping:
       aerialway: *poi_mapping_aerialway
       amenity: *poi_mapping_amenity
       barrier: *poi_mapping_barrier
+      building: *poi_mapping_building
       highway: *poi_mapping_highway
       historic: *poi_mapping_historic
       landuse: *poi_mapping_landuse
@@ -416,10 +446,26 @@ tables:
     - name: uic_ref
       key: uic_ref
       type: string
+    - name: religion
+      key: religion
+      type: string
+    - name: level
+      key: level
+      type: integer
+    - name: indoor
+      key: indoor
+      type: bool
+    - name: layer
+      key: layer
+      type: integer
+    - name: sport
+      key: sport
+      type: string
     mapping:
       aerialway: *poi_mapping_aerialway
       amenity: *poi_mapping_amenity
       barrier: *poi_mapping_barrier
+      building: *poi_mapping_building
       highway: *poi_mapping_highway
       historic: *poi_mapping_historic
       landuse: *poi_mapping_landuse

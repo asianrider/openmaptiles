@@ -22,7 +22,7 @@ generalized_tables:
   # etldoc: imposm3 -> osm_landuse_polygon_gen1
   landuse_polygon_gen1:
     source: landuse_polygon
-    sql_filter: area>power(ZRES11,2)
+    sql_filter: area>power(ZRES11,2) AND ST_IsValid(geometry)
     tolerance: ZRES13
 
 tables:
@@ -43,18 +43,17 @@ tables:
     - name: leisure
       key: leisure
       type: string
+    - name: tourism
+      key: tourism
+      type: string
+    - name: place
+      key: place
+      type: string
     - name: area
       type: area
     - name: webmerc_area
       type: webmerc_area
     mapping:
-      amenity:
-      - school
-      - university
-      - kindergarten
-      - college
-      - library
-      - hospital
       landuse:
       - railway
       - cemetery
@@ -64,7 +63,22 @@ tables:
       - commercial
       - industrial
       - retail
+      amenity:
+      - bus_station
+      - school
+      - university
+      - kindergarten
+      - college
+      - library
+      - hospital
       leisure:
       - stadium
       - pitch
       - playground
+      - track
+      tourism:
+      - theme_park
+      - zoo
+      place:
+      - suburb
+      - neighbourhood

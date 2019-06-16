@@ -18,7 +18,7 @@ services:
     networks:
     - postgres_conn
   import-water:
-    image: "openmaptiles/import-water:0.6"
+    image: "openmaptiles/import-water:1.0"
     env_file: .env
     networks:
     - postgres_conn
@@ -44,7 +44,7 @@ services:
     networks:
     - postgres_conn
   import-osm-diff:
-    image: "openmaptiles/import-osm:0.4"
+    image: "openmaptiles/import-osm:0.5"
     env_file: .env
     command: ./import_diff.sh
     environment:
@@ -56,7 +56,7 @@ services:
      - ./build:/mapping
      - cache:/cache
   update-osm:
-    image: "openmaptiles/import-osm:0.4"
+    image: "openmaptiles/import-osm:0.5"
     env_file: .env
     environment:
       DIFF_MODE: ${DIFF_MODE}
@@ -68,7 +68,7 @@ services:
      - ./build:/mapping
      - cache:/cache
   import-sql:
-    image: "openmaptiles/import-sql:0.7"
+    image: "openmaptiles/import-sql:0.8"
     env_file: .env
     networks:
     - postgres_conn
@@ -83,21 +83,13 @@ services:
     volumes:
      - ./wikidata:/import
   openmaptiles-tools:
-    image: "openmaptiles/openmaptiles-tools:0.8"
+    image: "openmaptiles/openmaptiles-tools:0.9.2"
     env_file: .env
     networks:
     - postgres_conn
     volumes:
      - .:/tileset
      - ./build:/sql
-  mapbox-studio:
-    image: "osm2vectortiles/mapbox-studio"
-    volumes:
-     - ./build/openmaptiles.tm2source:/projects/openmaptiles.tm2source
-    networks:
-     - postgres_conn
-    ports:
-     - "3000:3000"
   generate-changed-vectortiles:
     image: "openmaptiles/generate-vectortiles:0.1.1"
     command: ./export-list.sh
