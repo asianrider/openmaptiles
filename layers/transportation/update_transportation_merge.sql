@@ -30,8 +30,7 @@ CREATE MATERIALIZED VIEW osm_transportation_merge_linestring AS (
         (ST_Dump(geometry)).geom AS geometry,
         NULL::bigint AS osm_id,
         highway,
-        z_order,
-        NULL::text AS surface
+        z_order
     FROM (
       SELECT
           ST_LineMerge(ST_Collect(geometry)) AS geometry,
@@ -50,7 +49,7 @@ CREATE INDEX IF NOT EXISTS osm_transportation_merge_linestring_highway_partial_i
 
 -- etldoc: osm_transportation_merge_linestring -> osm_transportation_merge_linestring_gen3
 CREATE MATERIALIZED VIEW osm_transportation_merge_linestring_gen3 AS (
-    SELECT ST_Simplify(geometry, 120) AS geometry, osm_id, highway, z_order, surface
+    SELECT ST_Simplify(geometry, 120) AS geometry, osm_id, highway, z_order
     FROM osm_transportation_merge_linestring
     WHERE highway IN ('motorway','trunk', 'primary', 'secondary', 'tertiary', 'unclassified', 'road', 'track')
 );
@@ -62,7 +61,7 @@ CREATE INDEX IF NOT EXISTS osm_transportation_merge_linestring_gen3_highway_part
 
 -- etldoc: osm_transportation_merge_linestring_gen3 -> osm_transportation_merge_linestring_gen4
 CREATE MATERIALIZED VIEW osm_transportation_merge_linestring_gen4 AS (
-    SELECT ST_Simplify(geometry, 200) AS geometry, osm_id, highway, z_order, surface
+    SELECT ST_Simplify(geometry, 200) AS geometry, osm_id, highway, z_order
     FROM osm_transportation_merge_linestring_gen3
     WHERE highway IN ('motorway','trunk', 'primary', 'secondary', 'tertiary') AND ST_Length(geometry) > 50
 );
@@ -74,7 +73,7 @@ CREATE INDEX IF NOT EXISTS osm_transportation_merge_linestring_gen4_highway_part
 
 -- etldoc: osm_transportation_merge_linestring_gen4 -> osm_transportation_merge_linestring_gen5
 CREATE MATERIALIZED VIEW osm_transportation_merge_linestring_gen5 AS (
-    SELECT ST_Simplify(geometry, 500) AS geometry, osm_id, highway, z_order, surface
+    SELECT ST_Simplify(geometry, 500) AS geometry, osm_id, highway, z_order
     FROM osm_transportation_merge_linestring_gen4
     WHERE highway IN ('motorway','trunk', 'primary', 'secondary') AND ST_Length(geometry) > 100
 );
@@ -86,7 +85,7 @@ CREATE INDEX IF NOT EXISTS osm_transportation_merge_linestring_gen5_highway_part
 
 -- etldoc: osm_transportation_merge_linestring_gen5 -> osm_transportation_merge_linestring_gen6
 CREATE MATERIALIZED VIEW osm_transportation_merge_linestring_gen6 AS (
-    SELECT ST_Simplify(geometry, 1000) AS geometry, osm_id, highway, z_order, surface
+    SELECT ST_Simplify(geometry, 1000) AS geometry, osm_id, highway, z_order
     FROM osm_transportation_merge_linestring_gen5
     WHERE highway IN ('motorway','trunk', 'primary', 'secondary') AND ST_Length(geometry) > 500
 );
@@ -98,7 +97,7 @@ CREATE INDEX IF NOT EXISTS osm_transportation_merge_linestring_gen6_highway_part
 
 -- etldoc: osm_transportation_merge_linestring_gen6 -> osm_transportation_merge_linestring_gen7
 CREATE MATERIALIZED VIEW osm_transportation_merge_linestring_gen7 AS (
-    SELECT ST_Simplify(geometry, 2000) AS geometry, osm_id, highway, z_order, surface
+    SELECT ST_Simplify(geometry, 2000) AS geometry, osm_id, highway, z_order
     FROM osm_transportation_merge_linestring_gen6
     WHERE highway IN ('motorway','trunk', 'primary') AND ST_Length(geometry) > 1000
 );

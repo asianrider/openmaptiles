@@ -3,7 +3,7 @@
 -- etldoc:     label="layer_water_name | <z0_8> z0_8 | <z9_13> z9_13 | <z14_> z14+" ] ;
 
 CREATE OR REPLACE FUNCTION layer_water_name(bbox geometry, zoom_level integer)
-RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, name_de text, name_fr text, name_it text, name_es text, name_nl text, name_ru text, tags hstore, class text) AS $$
+RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, name_de text, name_fr text, name_it text, name_es text, name_nl text, name_ru text, tags hstore, class text, intermittent int) AS $$
     -- etldoc: osm_water_lakeline ->  layer_water_name:z9_13
     -- etldoc: osm_water_lakeline ->  layer_water_name:z14_
     SELECT
@@ -19,7 +19,8 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, name_de
     COALESCE(NULLIF(name_nl, ''), tags->'name:latin', name) AS name_nl,
     COALESCE(NULLIF(name_ru, ''), tags->'name:latin', name) AS name_ru,
     tags,
-    'lake'::text AS class
+    'lake'::text AS class,
+    is_intermittent::int AS intermittent
     FROM osm_water_lakeline
     WHERE geometry && bbox
       AND ((zoom_level BETWEEN 6 AND 13 AND LineLabel(zoom_level, NULLIF(name, ''), geometry))
@@ -40,7 +41,8 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, name_de
     COALESCE(NULLIF(name_nl, ''), tags->'name:latin', name) AS name_nl,
     COALESCE(NULLIF(name_ru, ''), tags->'name:latin', name) AS name_ru,
     tags,
-    'lake'::text AS class
+    'lake'::text AS class,
+    is_intermittent::int AS intermittent
     FROM osm_water_point
     WHERE geometry && bbox AND (
         (zoom_level BETWEEN 5 AND 13 AND area > 70000*2^(20-zoom_level))
@@ -59,7 +61,8 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, name_de
     COALESCE(NULLIF(name_nl, ''), tags->'name:latin', name) AS name_nl,
     COALESCE(NULLIF(name_ru, ''), tags->'name:latin', name) AS name_ru,
     tags,
-    place::text AS class
+    place::text AS class,
+    is_intermittent::int AS intermittent
     FROM osm_marine_point
     WHERE geometry && bbox AND (
         place = 'ocean'

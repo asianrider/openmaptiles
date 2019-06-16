@@ -12,10 +12,11 @@ indoor INT, surface TEXT) AS $$
     SELECT
         osm_id, geometry,
         CASE
-            WHEN highway IS NOT NULL OR public_transport IS NOT NULL THEN highway_class(highway, public_transport)
-            WHEN railway IS NOT NULL THEN railway_class(railway)
-            WHEN aerialway IS NOT NULL THEN aerialway
-            WHEN shipway IS NOT NULL THEN shipway
+            WHEN NULLIF(highway, '') IS NOT NULL OR NULLIF(public_transport, '') IS NOT NULL THEN highway_class(highway, public_transport)
+            WHEN NULLIF(railway, '') IS NOT NULL THEN railway_class(railway)
+            WHEN NULLIF(aerialway, '') IS NOT NULL THEN aerialway
+            WHEN NULLIF(shipway, '') IS NOT NULL THEN shipway
+            WHEN NULLIF(man_made, '') IS NOT NULL THEN man_made
         END AS class,
         CASE
             WHEN railway IS NOT NULL THEN railway
@@ -33,7 +34,7 @@ indoor INT, surface TEXT) AS $$
         NULLIF(layer, 0) AS layer,
         "level",
         CASE WHEN indoor=TRUE THEN 1 ELSE NULL END as indoor,
-	surface_value(surface) as surface
+        NULLIF(surface, '') AS surface
     FROM (
         -- etldoc: osm_transportation_merge_linestring_gen7 -> layer_transportation:z4
         SELECT
@@ -42,10 +43,10 @@ indoor INT, surface TEXT) AS $$
             NULL AS public_transport, NULL AS service,
             NULL::boolean AS is_bridge, NULL::boolean AS is_tunnel,
             NULL::boolean AS is_ford,
-            NULL::boolean AS is_ramp, NULL::boolean AS is_oneway,
+            NULL::boolean AS is_ramp, NULL::int AS is_oneway, NULL as man_made,
             NULL::int AS layer, NULL::int AS level, NULL::boolean AS indoor,
-            z_order,
-            surface
+	    NULL AS surface,
+            z_order
         FROM osm_transportation_merge_linestring_gen7
         WHERE zoom_level = 4
         UNION ALL
@@ -57,10 +58,9 @@ indoor INT, surface TEXT) AS $$
             NULL AS public_transport, NULL AS service,
             NULL::boolean AS is_bridge, NULL::boolean AS is_tunnel,
             NULL::boolean AS is_ford,
-            NULL::boolean AS is_ramp, NULL::boolean AS is_oneway,
+            NULL::boolean AS is_ramp, NULL::int AS is_oneway, NULL as man_made,
             NULL::int AS layer, NULL::int AS level, NULL::boolean AS indoor,
-            z_order,
-            surface
+            NULL AS surface, z_order
         FROM osm_transportation_merge_linestring_gen6
         WHERE zoom_level = 5
         UNION ALL
@@ -72,10 +72,9 @@ indoor INT, surface TEXT) AS $$
             NULL AS public_transport, NULL AS service,
             NULL::boolean AS is_bridge, NULL::boolean AS is_tunnel,
             NULL::boolean AS is_ford,
-            NULL::boolean AS is_ramp, NULL::boolean AS is_oneway,
+            NULL::boolean AS is_ramp, NULL::int AS is_oneway, NULL as man_made,
             NULL::int AS layer, NULL::int AS level, NULL::boolean AS indoor,
-            z_order,
-            surface
+            NULL AS surface, z_order
         FROM osm_transportation_merge_linestring_gen5
         WHERE zoom_level = 6
         UNION ALL
@@ -87,10 +86,9 @@ indoor INT, surface TEXT) AS $$
             NULL AS public_transport, NULL AS service,
             NULL::boolean AS is_bridge, NULL::boolean AS is_tunnel,
             NULL::boolean AS is_ford,
-            NULL::boolean AS is_ramp, NULL::boolean AS is_oneway,
+            NULL::boolean AS is_ramp, NULL::int AS is_oneway, NULL as man_made,
             NULL::int AS layer, NULL::int AS level, NULL::boolean AS indoor,
-            z_order,
-            surface
+            NULL AS surface, z_order
         FROM osm_transportation_merge_linestring_gen4
         WHERE zoom_level = 7
         UNION ALL
@@ -102,10 +100,9 @@ indoor INT, surface TEXT) AS $$
             NULL AS public_transport, NULL AS service,
             NULL::boolean AS is_bridge, NULL::boolean AS is_tunnel,
             NULL::boolean AS is_ford,
-            NULL::boolean AS is_ramp, NULL::boolean AS is_oneway,
+            NULL::boolean AS is_ramp, NULL::int AS is_oneway, NULL as man_made,
             NULL::int AS layer, NULL::int AS level, NULL::boolean AS indoor,
-            z_order,
-            surface
+            NULL AS surface, z_order
         FROM osm_transportation_merge_linestring_gen3
         WHERE zoom_level = 8
         UNION ALL
@@ -118,10 +115,9 @@ indoor INT, surface TEXT) AS $$
             NULL AS public_transport, NULL AS service,
             NULL::boolean AS is_bridge, NULL::boolean AS is_tunnel,
             NULL::boolean AS is_ford,
-            NULL::boolean AS is_ramp, NULL::boolean AS is_oneway,
-            NULL::int AS layer, NULL::int AS level, NULL::boolean AS indoor,
-            z_order,
-            surface
+            NULL::boolean AS is_ramp, NULL::int AS is_oneway, NULL as man_made,
+            layer, NULL::int AS level, NULL::boolean AS indoor,
+            NULL AS surface, z_order
         FROM osm_highway_linestring_gen2
         WHERE zoom_level BETWEEN 9 AND 10
           AND st_length(geometry)>zres(11)
@@ -134,10 +130,9 @@ indoor INT, surface TEXT) AS $$
             NULL AS public_transport, NULL AS service,
             NULL::boolean AS is_bridge, NULL::boolean AS is_tunnel,
             NULL::boolean AS is_ford,
-            NULL::boolean AS is_ramp, NULL::boolean AS is_oneway,
-            NULL::int AS layer, NULL::int AS level, NULL::boolean AS indoor,
-            z_order,
-            surface
+            NULL::boolean AS is_ramp, NULL::int AS is_oneway, NULL as man_made,
+            layer, NULL::int AS level, NULL::boolean AS indoor,
+            NULL AS surface, z_order
         FROM osm_highway_linestring_gen1
         WHERE zoom_level = 11
           AND st_length(geometry)>zres(12)
@@ -150,27 +145,34 @@ indoor INT, surface TEXT) AS $$
             osm_id, geometry,
             highway, NULL AS railway, NULL AS aerialway, NULL AS shipway,
             public_transport, service_value(service) AS service,
-            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway,
-            CASE WHEN highway IN ('footway', 'steps') THEN layer
-                ELSE NULL::int
-            END AS layer,
+            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway, man_made,
+            layer,
             CASE WHEN highway IN ('footway', 'steps') THEN "level"
                 ELSE NULL::int
             END AS "level",
             CASE WHEN highway IN ('footway', 'steps') THEN indoor
                 ELSE NULL::boolean
             END AS indoor,
-            z_order,
-            surface
+            surface_value(surface) AS "surface",
+            z_order
         FROM osm_highway_linestring
         WHERE NOT is_area AND (
             zoom_level = 12 AND (
                 highway_class(highway, public_transport) NOT IN ('path')
                 OR highway IN ('unclassified', 'residential')
-            )
+            ) AND man_made <> 'pier'
             OR zoom_level = 13
-                AND highway_class(highway, public_transport) NOT IN ('path')
+                AND (
+                    highway_class(highway, public_transport) NOT IN ('path') AND man_made <> 'pier'
+                OR
+                    man_made = 'pier' AND NOT ST_IsClosed(geometry)
+                )
             OR zoom_level >= 14
+                AND (
+                    man_made <> 'pier'
+                OR
+                    NOT ST_IsClosed(geometry)
+                )
         )
         UNION ALL
 
@@ -181,10 +183,9 @@ indoor INT, surface TEXT) AS $$
             NULL AS public_transport, service_value(service) AS service,
             NULL::boolean AS is_bridge, NULL::boolean AS is_tunnel,
             NULL::boolean AS is_ford,
-            NULL::boolean AS is_ramp, NULL::boolean AS is_oneway,
+            NULL::boolean AS is_ramp, NULL::int AS is_oneway, NULL as man_made,
             NULL::int AS layer, NULL::int AS level, NULL::boolean AS indoor,
-            z_order,
-            NULL AS surface
+	    NULL as surface, z_order
         FROM osm_railway_linestring_gen5
         WHERE zoom_level = 8
             AND railway='rail' AND service = '' and usage='main'
@@ -197,10 +198,9 @@ indoor INT, surface TEXT) AS $$
             NULL AS public_transport, service_value(service) AS service,
             NULL::boolean AS is_bridge, NULL::boolean AS is_tunnel,
             NULL::boolean AS is_ford,
-            NULL::boolean AS is_ramp, NULL::boolean AS is_oneway,
-            NULL::int AS layer, NULL::int AS level, NULL::boolean AS indoor,
-            z_order,
-            NULL AS surface
+            NULL::boolean AS is_ramp, NULL::int AS is_oneway, NULL as man_made,
+            layer, NULL::int AS level, NULL::boolean AS indoor,
+	    NULL AS surface, z_order
         FROM osm_railway_linestring_gen4
         WHERE zoom_level = 9
             AND railway='rail' AND service = '' and usage='main'
@@ -211,10 +211,9 @@ indoor INT, surface TEXT) AS $$
             osm_id, geometry,
             NULL AS highway, railway, NULL AS aerialway, NULL AS shipway,
             NULL AS public_transport, service_value(service) AS service,
-            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway,
-            NULL::int AS layer, NULL::int AS level, NULL::boolean AS indoor,
-            z_order,
-            NULL AS surface
+            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway, NULL as man_made,
+            layer, NULL::int AS level, NULL::boolean AS indoor,
+            NULL AS surface, z_order
         FROM osm_railway_linestring_gen3
         WHERE zoom_level = 10
             AND railway IN ('rail', 'narrow_gauge') AND service = ''
@@ -225,10 +224,9 @@ indoor INT, surface TEXT) AS $$
             osm_id, geometry,
             NULL AS highway, railway, NULL AS aerialway, NULL AS shipway,
             NULL AS public_transport, service_value(service) AS service,
-            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway,
-            NULL::int AS layer, NULL::int AS level, NULL::boolean AS indoor,
-            z_order,
-            NULL AS surface
+            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway, NULL as man_made,
+            layer, NULL::int AS level, NULL::boolean AS indoor,
+            NULL as surface, z_order
         FROM osm_railway_linestring_gen2
         WHERE zoom_level = 11
             AND railway IN ('rail', 'narrow_gauge', 'light_rail') AND service = ''
@@ -239,10 +237,9 @@ indoor INT, surface TEXT) AS $$
             osm_id, geometry,
             NULL AS highway, railway, NULL AS aerialway, NULL AS shipway,
             NULL AS public_transport, service_value(service) AS service,
-            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway,
-            NULL::int AS layer, NULL::int AS level, NULL::boolean AS indoor,
-            z_order,
-            NULL AS surface
+            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway, NULL as man_made,
+            layer, NULL::int AS level, NULL::boolean AS indoor,
+            NULL as surface, z_order
         FROM osm_railway_linestring_gen1
         WHERE zoom_level = 12
             AND railway IN ('rail', 'narrow_gauge', 'light_rail') AND service = ''
@@ -254,10 +251,9 @@ indoor INT, surface TEXT) AS $$
             osm_id, geometry,
             NULL AS highway, railway, NULL AS aerialway, NULL AS shipway,
             NULL AS public_transport, service_value(service) AS service,
-            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway,
-            NULL::int AS layer, NULL::int AS level, NULL::boolean AS indoor,
-            z_order,
-            NULL AS surface
+            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway, NULL as man_made,
+            layer, NULL::int AS level, NULL::boolean AS indoor,
+            NULL as surface, z_order
         FROM osm_railway_linestring
         WHERE zoom_level = 13
                 AND railway IN ('rail', 'narrow_gauge', 'light_rail') AND service = ''
@@ -269,10 +265,9 @@ indoor INT, surface TEXT) AS $$
             osm_id, geometry,
             NULL AS highway, NULL as railway, aerialway, NULL AS shipway,
             NULL AS public_transport, service_value(service) AS service,
-            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway,
-            NULL::int AS layer, NULL::int AS level, NULL::boolean AS indoor,
-            z_order,
-            NULL AS surface
+            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway, NULL as man_made,
+            layer, NULL::int AS level, NULL::boolean AS indoor,
+            NULL AS surface, z_order
         FROM osm_aerialway_linestring_gen1
         WHERE zoom_level = 12
         UNION ALL
@@ -283,10 +278,9 @@ indoor INT, surface TEXT) AS $$
             osm_id, geometry,
             NULL AS highway, NULL as railway, aerialway, NULL AS shipway,
             NULL AS public_transport, service_value(service) AS service,
-            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway,
-            NULL::int AS layer, NULL::int AS level, NULL::boolean AS indoor,
-            z_order,
-            NULL AS surface
+            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway, NULL as man_made,
+            layer, NULL::int AS level, NULL::boolean AS indoor,
+            NULL AS surface, z_order
         FROM osm_aerialway_linestring
         WHERE zoom_level >= 13
         UNION ALL
@@ -296,10 +290,9 @@ indoor INT, surface TEXT) AS $$
             osm_id, geometry,
             NULL AS highway, NULL AS railway, NULL AS aerialway, shipway,
             NULL AS public_transport, service_value(service) AS service,
-            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway,
-            NULL::int AS layer, NULL::int AS level, NULL::boolean AS indoor,
-            z_order,
-            NULL AS surface
+            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway, NULL as man_made,
+            layer, NULL::int AS level, NULL::boolean AS indoor,
+            NULL AS surface, z_order
         FROM osm_shipway_linestring_gen2
         WHERE zoom_level = 8
         UNION ALL
@@ -309,10 +302,9 @@ indoor INT, surface TEXT) AS $$
             osm_id, geometry,
             NULL AS highway, NULL AS railway, NULL AS aerialway, shipway,
             NULL AS public_transport, service_value(service) AS service,
-            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway,
-            NULL::int AS layer, NULL::int AS level, NULL::boolean AS indoor,
-            z_order,
-            NULL AS surface
+            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway, NULL as man_made,
+            layer, NULL::int AS level, NULL::boolean AS indoor,
+            NULL AS surface, z_order
         FROM osm_shipway_linestring_gen1
         WHERE zoom_level BETWEEN 9 AND 12
         UNION ALL
@@ -323,10 +315,9 @@ indoor INT, surface TEXT) AS $$
             osm_id, geometry,
             NULL AS highway, NULL AS railway, NULL AS aerialway, shipway,
             NULL AS public_transport, service_value(service) AS service,
-            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway,
-            NULL::int AS layer, NULL::int AS level, NULL::boolean AS indoor,
-            z_order,
-            NULL AS surface
+            is_bridge, is_tunnel, is_ford, is_ramp, is_oneway, NULL as man_made,
+            layer, NULL::int AS level, NULL::boolean AS indoor,
+            NULL AS surface, z_order
         FROM osm_shipway_linestring
         WHERE zoom_level >= 13
         UNION ALL
@@ -341,14 +332,19 @@ indoor INT, surface TEXT) AS $$
             osm_id, geometry,
             highway, NULL AS railway, NULL AS aerialway, NULL AS shipway,
             public_transport, NULL AS service,
-            FALSE AS is_bridge, FALSE AS is_tunnel, FALSE AS is_ford,
-            FALSE AS is_ramp, FALSE AS is_oneway,
-            NULL::int AS layer, NULL::int AS level, NULL::boolean AS indoor,
-            z_order,
-            NULL AS surface
+            CASE WHEN man_made IN ('bridge') THEN TRUE
+                ELSE FALSE
+            END AS is_bridge, FALSE AS is_tunnel, FALSE AS is_ford,
+            FALSE AS is_ramp, FALSE::int AS is_oneway, man_made,
+            layer, NULL::int AS level, NULL::boolean AS indoor,
+            NULL AS surface, z_order
         FROM osm_highway_polygon
         -- We do not want underground pedestrian areas for now
-        WHERE zoom_level >= 13 AND is_area AND COALESCE(layer, 0) >= 0
+        WHERE zoom_level >= 13
+            AND (
+                  man_made IN ('bridge', 'pier')
+                  OR (is_area AND COALESCE(layer, 0) >= 0)
+            )
     ) AS zoom_levels
     WHERE geometry && bbox
     ORDER BY z_order ASC;
