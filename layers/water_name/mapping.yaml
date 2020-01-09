@@ -13,24 +13,6 @@ tables:
     - name: name_en
       key: name:en
       type: string
-    - name: name_de
-      key: name:de
-      type: string
-    - name: name_fr
-      key: name:fr
-      type: string
-    - name: name_it
-      key: name:it
-      type: string
-    - name: name_es
-      key: name:es
-      type: string
-    - name: name_nl
-      key: name:nl
-      type: string
-    - name: name_ru
-      key: name:ru
-      type: string
     - name: tags
       type: hstore_tags
     - name: place
@@ -39,6 +21,9 @@ tables:
     - name: rank
       key: rank
       type: integer
+    - name: is_intermittent
+      key: intermittent
+      type: bool
     filters:
       require:
         name: ["__any__"]

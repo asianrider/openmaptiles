@@ -9,7 +9,7 @@ $$ LANGUAGE SQL IMMUTABLE STRICT;
 
 -- The classes for highways are derived from the classes used in ClearTables
 -- https://github.com/ClearTables/ClearTables/blob/master/transportation.lua
-CREATE OR REPLACE FUNCTION highway_class(highway TEXT, public_transport TEXT) RETURNS TEXT AS $$
+CREATE OR REPLACE FUNCTION highway_class(highway TEXT, public_transport TEXT, construction TEXT) RETURNS TEXT AS $$
     SELECT CASE
         WHEN highway IN ('motorway', 'motorway_link') THEN 'motorway'
         WHEN highway IN ('trunk', 'trunk_link') THEN 'trunk'
@@ -17,9 +17,19 @@ CREATE OR REPLACE FUNCTION highway_class(highway TEXT, public_transport TEXT) RE
         WHEN highway IN ('secondary', 'secondary_link') THEN 'secondary'
         WHEN highway IN ('tertiary', 'tertiary_link') THEN 'tertiary'
         WHEN highway IN ('unclassified', 'residential', 'living_street', 'road') THEN 'minor'
-        WHEN highway IN ('service', 'track') THEN highway
         WHEN highway IN ('pedestrian', 'path', 'footway', 'cycleway', 'steps', 'bridleway', 'corridor') OR public_transport IN ('platform') THEN 'path'
-        WHEN highway = 'raceway' THEN 'raceway'
+        WHEN highway IN ('service', 'track', 'raceway') THEN highway
+        WHEN highway = 'construction' THEN CASE
+          WHEN construction IN ('motorway', 'motorway_link') THEN 'motorway_construction'
+          WHEN construction IN ('trunk', 'trunk_link') THEN 'trunk_construction'
+          WHEN construction IN ('primary', 'primary_link') THEN 'primary_construction'
+          WHEN construction IN ('secondary', 'secondary_link') THEN 'secondary_construction'
+          WHEN construction IN ('tertiary', 'tertiary_link') THEN 'tertiary_construction'
+          WHEN construction = '' OR construction IN ('unclassified', 'residential', 'living_street', 'road') THEN 'minor_construction'
+          WHEN construction IN ('pedestrian', 'path', 'footway', 'cycleway', 'steps', 'bridleway', 'corridor') OR public_transport IN ('platform') THEN 'path_construction'
+          WHEN construction IN ('service', 'track', 'raceway') THEN CONCAT(highway, '_construction')
+          ELSE NULL
+        END
         ELSE NULL
     END;
 $$ LANGUAGE SQL IMMUTABLE;
@@ -43,12 +53,14 @@ CREATE OR REPLACE FUNCTION service_value(service TEXT) RETURNS TEXT AS $$
     END;
 $$ LANGUAGE SQL IMMUTABLE STRICT;
 
+-- Limit surface to only the most important values to ensure
+-- we always know the values of surface
 CREATE OR REPLACE FUNCTION surface_value(surface TEXT) RETURNS TEXT AS $$
     SELECT CASE
-      WHEN surface IN ('paved', 'asphalt', 'sett', 'concrete', 'paving_stones', 'cobblestone', 'metal', 'wood') THEN 'paved'
-      WHEN surface IN ('unpaved', 'compacted', 'dirt', 'earth', 'grass', 'grass_paver', 'gravel_turf', 'fine_gravel', 'gravel', 'ground', 'mud', 'pebblestone', 'salt', 'woodchips') THEN 'unpaved'
-      WHEN surface = 'sand' THEN 'sand'
-      WHEN surface IN ('ice', 'snow') then 'ice'
+        WHEN surface IN ('paved', 'asphalt', 'cobblestone', 'concrete', 'concrete:lanes', 'concrete:plates', 'metal', 'paving_stones', 'sett', 'unhewn_cobblestone', 'wood') THEN 'paved'
+        WHEN surface IN ('unpaved', 'compacted', 'dirt', 'earth', 'fine_gravel', 'grass', 'grass_paver', 'gravel', 'gravel_turf', 'ground', 'mud', 'pebblestone', 'salt', 'woodchips') THEN 'unpaved'
+        WHEN surface = 'sand' THEN 'sand'
+        WHEN surface IN ('ice', 'snow') then 'ice'
         ELSE NULL
     END;
 $$ LANGUAGE SQL IMMUTABLE STRICT;

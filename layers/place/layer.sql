@@ -4,19 +4,14 @@
 
 CREATE OR REPLACE FUNCTION layer_place(bbox geometry, zoom_level int, pixel_width numeric)
 RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text,
-    name_de text, name_fr text, name_it text, name_es text, name_nl text, name_ru text, tags hstore, class text, "rank" int, capital INT, iso_a2
+    tags hstore, class text, "rank" int, capital INT, iso_a2
         TEXT) AS $$
+    SELECT * FROM (
 
     -- etldoc: osm_continent_point -> layer_place:z0_3
     SELECT
         osm_id*10, geometry, name,
         COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
-        COALESCE(NULLIF(name_de, ''), tags->'name:latin', name) AS name_de,
-        COALESCE(NULLIF(name_fr, ''), tags->'name:latin', name) AS name_fr,
-        COALESCE(NULLIF(name_it, ''), tags->'name:latin', name) AS name_it,
-        COALESCE(NULLIF(name_es, ''), tags->'name:latin', name) AS name_es,
-        COALESCE(NULLIF(name_nl, ''), tags->'name:latin', name) AS name_nl,
-        COALESCE(NULLIF(name_ru, ''), name) AS name_ru,
         tags,
         'continent' AS class, 1 AS "rank", NULL::int AS capital,
         NULL::text AS iso_a2
@@ -31,12 +26,6 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text,
     SELECT
         osm_id*10, geometry, name,
         COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
-        COALESCE(NULLIF(name_de, ''), tags->'name:latin', name) AS name_de,
-        COALESCE(NULLIF(name_fr, ''), tags->'name:latin', name) AS name_fr,
-        COALESCE(NULLIF(name_it, ''), tags->'name:latin', name) AS name_it,
-        COALESCE(NULLIF(name_es, ''), tags->'name:latin', name) AS name_es,
-        COALESCE(NULLIF(name_nl, ''), tags->'name:latin', name) AS name_nl,
-        COALESCE(NULLIF(name_ru, ''), name) AS name_ru,
         tags,
         'country' AS class, "rank", NULL::int AS capital,
         iso3166_1_alpha_2 AS iso_a2
@@ -51,13 +40,7 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text,
     SELECT
         osm_id*10, geometry, name,
         COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
-        COALESCE(NULLIF(name_de, ''), tags->'name:latin', name) AS name_de,
-        COALESCE(NULLIF(name_fr, ''), tags->'name:latin', name) AS name_fr,
-        COALESCE(NULLIF(name_it, ''), tags->'name:latin', name) AS name_it,
-        COALESCE(NULLIF(name_es, ''), tags->'name:latin', name) AS name_es,
-        COALESCE(NULLIF(name_nl, ''), tags->'name:latin', name) AS name_nl,
-        COALESCE(NULLIF(name_ru, ''), name) AS name_ru,
-       tags,
+        tags,
         'state' AS class, "rank", NULL::int AS capital,
         NULL::text AS iso_a2
     FROM osm_state_point
@@ -73,12 +56,6 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text,
     SELECT
         osm_id*10, geometry, name,
         COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
-        COALESCE(NULLIF(name_de, ''), tags->'name:latin', name) AS name_de,
-        COALESCE(NULLIF(name_fr, ''), tags->'name:latin', name) AS name_fr,
-        COALESCE(NULLIF(name_it, ''), tags->'name:latin', name) AS name_it,
-        COALESCE(NULLIF(name_es, ''), tags->'name:latin', name) AS name_es,
-        COALESCE(NULLIF(name_nl, ''), tags->'name:latin', name) AS name_nl,
-        COALESCE(NULLIF(name_ru, ''), name) AS name_ru,
         tags,
         'island' AS class, 7 AS "rank", NULL::int AS capital,
         NULL::text AS iso_a2
@@ -92,12 +69,6 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text,
     SELECT
         osm_id*10, geometry, name,
         COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
-        COALESCE(NULLIF(name_de, ''), tags->'name:latin', name) AS name_de,
-        COALESCE(NULLIF(name_fr, ''), tags->'name:latin', name) AS name_fr,
-        COALESCE(NULLIF(name_it, ''), tags->'name:latin', name) AS name_it,
-        COALESCE(NULLIF(name_es, ''), tags->'name:latin', name) AS name_es,
-        COALESCE(NULLIF(name_nl, ''), tags->'name:latin', name) AS name_nl,
-        COALESCE(NULLIF(name_ru, ''), name) AS name_ru,
         tags,
         'island' AS class, island_rank(area) AS "rank", NULL::int AS capital,
         NULL::text AS iso_a2
@@ -113,10 +84,11 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text,
     -- etldoc: layer_city          -> layer_place:z8_11
     -- etldoc: layer_city          -> layer_place:z12_14
     SELECT
-        osm_id*10, geometry, name, name_en, name_de, name_fr, name_it, name_es, name_nl, name_ru,
+        osm_id*10, geometry, name, name_en,
         tags,
         place::text AS class, "rank", capital,
         NULL::text AS iso_a2
     FROM layer_city(bbox, zoom_level, pixel_width)
     ORDER BY "rank" ASC
+    ) AS place_all
 $$ LANGUAGE SQL IMMUTABLE;

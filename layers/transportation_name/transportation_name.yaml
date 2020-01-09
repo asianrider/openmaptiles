@@ -10,7 +10,6 @@ layer:
   fields:
     name: The OSM [`name`](http://wiki.openstreetmap.org/wiki/Highways#Names_and_references) value of the highway.
     name_en: English name `name:en` if available, otherwise `name`.
-    name_de: German name `name:de` if available, otherwise `name` or `name:en`.
     ref: The OSM [`ref`](http://wiki.openstreetmap.org/wiki/Key:ref) tag of the motorway or its network.
     ref_length: Length of the `ref` field. Useful for having a shield icon as background for labeling motorways.
     network:
@@ -29,7 +28,7 @@ layer:
       - road (default)
     class:
       description: |
-          Distinguish between more and less important roads.
+          Distinguish between more and less important roads and roads under construction.
       values:
       - motorway
       - trunk
@@ -41,6 +40,16 @@ layer:
       - track
       - path
       - raceway
+      - motorway_construction
+      - trunk_construction
+      - primary_construction
+      - secondary_construction
+      - tertiary_construction
+      - minor_construction
+      - service_construction
+      - track_construction
+      - path_construction
+      - raceway_construction
       - rail
       - transit
     subclass:
@@ -74,7 +83,7 @@ layer:
   datasource:
     geometry_field: geometry
     srid: 900913
-    query: (SELECT geometry, name, name_en, name_de, {name_languages}, ref, ref_length, network::text, class::text, subclass, layer, level, indoor FROM layer_transportation_name(!bbox!, z(!scale_denominator!))) AS t
+    query: (SELECT geometry, name, name_en, {name_languages}, ref, ref_length, network::text, class::text, subclass, layer, level, indoor FROM layer_transportation_name(!bbox!, z(!scale_denominator!))) AS t
 schema:
   - ./network_type.sql
   - ./update_route_member.sql

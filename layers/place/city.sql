@@ -4,15 +4,10 @@
 
 -- etldoc: osm_city_point -> layer_city:z2_14
 CREATE OR REPLACE FUNCTION layer_city(bbox geometry, zoom_level int, pixel_width numeric)
-RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, name_de text, name_fr text, name_it text, name_es text, name_nl text, name_ru text, tags hstore, place city_place, "rank" int, capital int) AS $$
+RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, tags hstore, place city_place, "rank" int, capital int) AS $$
+  SELECT * FROM (
     SELECT osm_id, geometry, name,
     COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
-    COALESCE(NULLIF(name_de, ''), tags->'name:latin', name) AS name_de,
-    COALESCE(NULLIF(name_fr, ''), tags->'name:latin', name) AS name_fr,
-    COALESCE(NULLIF(name_it, ''), tags->'name:latin', name) AS name_it,
-    COALESCE(NULLIF(name_es, ''), tags->'name:latin', name) AS name_es,
-    COALESCE(NULLIF(name_nl, ''), tags->'name:latin', name) AS name_nl,
-    COALESCE(NULLIF(name_ru, ''), name) AS name_ru,
     tags,
     place, "rank", normalize_capital_level(capital) AS capital
     FROM osm_city_point
@@ -23,12 +18,6 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, name_de
     UNION ALL
     SELECT osm_id, geometry, name,
         COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
-        COALESCE(NULLIF(name_de, ''), tags->'name:latin', name) AS name_de,
-        COALESCE(NULLIF(name_fr, ''), tags->'name:latin', name) AS name_fr,
-        COALESCE(NULLIF(name_it, ''), tags->'name:latin', name) AS name_it,
-        COALESCE(NULLIF(name_es, ''), tags->'name:latin', name) AS name_es,
-        COALESCE(NULLIF(name_nl, ''), tags->'name:latin', name) AS name_nl,
-        COALESCE(NULLIF(name_ru, ''), name) AS name_ru,
         tags,
         place,
         COALESCE("rank", gridrank + 10),
@@ -36,12 +25,6 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, name_de
     FROM (
       SELECT osm_id, geometry, name,
       COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
-      COALESCE(NULLIF(name_de, ''), tags->'name:latin', name) AS name_de,
-      COALESCE(NULLIF(name_fr, ''), tags->'name:latin', name) AS name_fr,
-      COALESCE(NULLIF(name_it, ''), tags->'name:latin', name) AS name_it,
-      COALESCE(NULLIF(name_es, ''), tags->'name:latin', name) AS name_es,
-      COALESCE(NULLIF(name_nl, ''), tags->'name:latin', name) AS name_nl,
-      COALESCE(NULLIF(name_ru, ''), name) AS name_ru,
       tags,
       place, "rank", capital,
       row_number() OVER (

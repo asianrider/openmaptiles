@@ -3,23 +3,24 @@
 -- etldoc:     label="layer_poi | <z12> z12 | <z13> z13 | <z14_> z14+" ] ;
 
 CREATE OR REPLACE FUNCTION layer_poi(bbox geometry, zoom_level integer, pixel_width numeric)
-RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, name_de text, name_fr text, name_it text, name_es text, name_nl text, name_ru text, tags hstore, class text, subclass text, agg_stop integer, "rank" int) AS $$
+RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, tags hstore, class text, subclass text, agg_stop integer, layer integer, level integer, indoor integer, "rank" int) AS $$
     SELECT osm_id_hash AS osm_id, geometry, NULLIF(name, '') AS name,
         COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
-        COALESCE(NULLIF(name_de, ''), tags->'name:latin', name) AS name_de,
-        COALESCE(NULLIF(name_fr, ''), tags->'name:latin', name) AS name_fr,
-        COALESCE(NULLIF(name_it, ''), tags->'name:latin', name) AS name_it,
-        COALESCE(NULLIF(name_es, ''), tags->'name:latin', name) AS name_es,
-        COALESCE(NULLIF(name_nl, ''), tags->'name:latin', name) AS name_nl,
-        COALESCE(NULLIF(name_ru, ''), tags->'name:latin', name) AS name_ru,
         tags,
         poi_class(subclass, mapping_key) AS class,
         CASE
             WHEN subclass = 'information'
                 THEN NULLIF(information, '')
+            WHEN subclass = 'place_of_worship'
+                    THEN NULLIF(religion, '')
+            WHEN subclass = 'pitch'
+                    THEN NULLIF(sport, '')
             ELSE subclass
         END AS subclass,
         agg_stop,
+        NULLIF(layer, 0) AS layer,
+        "level",
+        CASE WHEN indoor=TRUE THEN 1 ELSE NULL END as indoor,
         row_number() OVER (
             PARTITION BY LabelGrid(geometry, 100 * pixel_width)
             ORDER BY CASE WHEN name = '' THEN 2000 ELSE poi_class_rank(poi_class(subclass, mapping_key)) END ASC
