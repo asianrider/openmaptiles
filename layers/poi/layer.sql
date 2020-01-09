@@ -42,6 +42,14 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, name_de
                     OR subclass IN ('halt', 'ferry_terminal'))
         UNION ALL
 
+        SELECT *,
+            osm_id*10 AS osm_id_hash FROM osm_poi_point
+            WHERE geometry && bbox
+                AND zoom_level BETWEEN 7 AND 13
+                AND mapping_key = 'barrier' or subclass = 'fuel'
+                   
+        UNION ALL
+
         -- etldoc: osm_poi_point ->  layer_poi:z14_
         SELECT *,
             osm_id*10 AS osm_id_hash FROM osm_poi_point

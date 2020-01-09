@@ -23,6 +23,8 @@ RETURNS INT AS $$
         WHEN 'fast_food' THEN 600
         WHEN 'clothing_store' THEN 700
         WHEN 'bar' THEN 800
+        WHEN 'border_control' THEN 50
+        WHEN 'toll_booth' THEN 135
         ELSE 1000
     END;
 $$ LANGUAGE SQL IMMUTABLE;
@@ -63,6 +65,8 @@ RETURNS TEXT AS $$
         WHEN subclass IN ('bag','clothes') THEN 'clothing_store'
         WHEN subclass IN ('swimming_area','swimming') THEN 'swimming'
         WHEN subclass IN ('castle','ruins') THEN 'castle'
+        WHEN subclass IN ('border_control') THEN 'border_control'
+        WHEN subclass IN ('toll_booth') THEN 'toll_booth'
         ELSE subclass
     END;
 $$ LANGUAGE SQL IMMUTABLE;
