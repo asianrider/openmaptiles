@@ -163,7 +163,7 @@ indoor INT, surface TEXT) AS $$
             ) AND man_made <> 'pier'
             OR zoom_level = 13
                 AND (
-                    highway_class(highway, public_transport) NOT IN ('path') AND man_made <> 'pier'
+                    man_made <> 'pier'
                 OR
                     man_made = 'pier' AND NOT ST_IsClosed(geometry)
                 )
