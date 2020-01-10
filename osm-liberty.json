@@ -1417,15 +1417,15 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#cfcdca",
+        "line-color": "rgba(115, 112, 112, 1)",
         "line-opacity": {
           "stops": [
             [
-              12,
+              7.9,
               0
             ],
             [
-              12.5,
+              8.5,
               1
             ]
           ]
@@ -1434,20 +1434,20 @@
           "base": 1.2,
           "stops": [
             [
-              12,
+              6.9,
+              0
+            ],
+            [
+              7.5,
               0.5
             ],
             [
-              13,
-              1
+              11,
+              2.5
             ],
             [
               14,
               4
-            ],
-            [
-              20,
-              20
             ]
           ]
         }
@@ -1512,7 +1512,7 @@
       "metadata": {},
       "source": "u88szdde1",
       "source-layer": "transportation",
-      "minzoom": 3,
+      "minzoom": 5,
       "maxzoom": 24,
       "filter": [
         "all",
@@ -1547,7 +1547,7 @@
           "stops": [
             [
               5,
-              0.4
+              0
             ],
             [
               6,
@@ -1575,7 +1575,7 @@
       "metadata": {},
       "source": "u88szdde1",
       "source-layer": "transportation",
-      "minzoom": 5,
+      "minzoom": 4,
       "filter": [
         "all",
         [
@@ -1607,19 +1607,19 @@
           "stops": [
             [
               4,
-              0.4
-            ],
-            [
-              5,
-              0.7
+              1
             ],
             [
               6,
-              1.75
+              2.75
             ],
             [
-              20,
-              22
+              7,
+              3.5
+            ],
+            [
+              14,
+              6
             ]
           ]
         }
@@ -1970,16 +1970,16 @@
           "base": 1.2,
           "stops": [
             [
-              7,
+              6,
               0
             ],
             [
-              8,
+              7,
               0.5
             ],
             [
-              20,
-              18
+              14,
+              3
             ]
           ]
         }
@@ -2072,7 +2072,7 @@
       }
     },
     {
-      "id": "road_minor-copy",
+      "id": "road_minor",
       "type": "line",
       "metadata": {},
       "source": "u88szdde1",
@@ -2105,21 +2105,32 @@
       },
       "paint": {
         "line-color": "#fff",
-        "line-opacity": 1,
-        "line-width": {
-          "base": 1.2,
+        "line-opacity": {
           "stops": [
             [
-              13.5,
+              11.5,
               0
             ],
             [
-              14,
-              2.5
+              12,
+              1
+            ]
+          ]
+        },
+        "line-width": {
+          "base": 0,
+          "stops": [
+            [
+              11.5,
+              0
             ],
             [
-              20,
-              18
+              12,
+              1
+            ],
+            [
+              14,
+              2
             ]
           ]
         }
@@ -3127,7 +3138,7 @@
         ]
       ],
       "layout": {
-        "text-field": "{name_fr}",
+        "text-field": "{name_en}",
         "text-font": [
           "Roboto Regular"
         ],
@@ -3154,7 +3165,7 @@
         "Point"
       ],
       "layout": {
-        "text-field": "{name_fr}",
+        "text-field": "{name_en}",
         "text-font": [
           "Roboto Regular"
         ],
@@ -3190,7 +3201,7 @@
       "layout": {
         "icon-image": "{class}_11",
         "text-anchor": "top",
-        "text-field": "{name_fr}",
+        "text-field": "{name_en}",
         "text-font": [
           "Roboto Condensed Italic"
         ],
@@ -3237,7 +3248,7 @@
       "layout": {
         "icon-image": "{class}_11",
         "text-anchor": "top",
-        "text-field": "{name_fr}",
+        "text-field": "{name_en}",
         "text-font": [
           "Roboto Condensed Italic"
         ],
@@ -3284,7 +3295,7 @@
       "layout": {
         "icon-image": "{class}_11",
         "text-anchor": "top",
-        "text-field": "{name_fr}",
+        "text-field": "{name_en}",
         "text-font": [
           "Roboto Condensed Italic"
         ],
@@ -3354,7 +3365,7 @@
       "layout": {
         "symbol-placement": "line",
         "text-anchor": "center",
-        "text-field": "{name_fr}",
+        "text-field": "{name_en}",
         "text-font": [
           "Roboto Regular"
         ],
@@ -3447,7 +3458,7 @@
         ]
       ],
       "layout": {
-        "text-field": "{name_fr}",
+        "text-field": "{name_en}",
         "text-font": [
           "Roboto Condensed Italic"
         ],
@@ -3489,7 +3500,7 @@
         ]
       ],
       "layout": {
-        "text-field": "{name_fr}",
+        "text-field": "{name_en}",
         "text-font": [
           "Roboto Regular"
         ],
@@ -3543,7 +3554,7 @@
           ]
         },
         "text-anchor": "bottom",
-        "text-field": "{name_fr}",
+        "text-field": "{name_en}",
         "text-font": [
           "Roboto Regular"
         ],
@@ -3607,7 +3618,7 @@
           ]
         },
         "text-anchor": "bottom",
-        "text-field": "{name_fr}",
+        "text-field": "{name_en}",
         "text-font": [
           "Roboto Medium"
         ],
@@ -3673,7 +3684,7 @@
           ]
         },
         "text-anchor": "bottom",
-        "text-field": "{name_fr}",
+        "text-field": "{name_en}",
         "text-font": [
           "Roboto Medium"
         ],
@@ -3720,7 +3731,7 @@
         ]
       ],
       "layout": {
-        "text-field": "{name_fr}",
+        "text-field": "{name_en}",
         "text-font": [
           "Roboto Condensed Italic"
         ],
@@ -3764,7 +3775,7 @@
         ]
       ],
       "layout": {
-        "text-field": "{name_fr}",
+        "text-field": "{name_en}",
         "text-font": [
           "Roboto Condensed Italic"
         ],
@@ -3810,7 +3821,7 @@
         ]
       ],
       "layout": {
-        "text-field": "{name_fr}",
+        "text-field": "{name_en}",
         "text-font": [
           "Roboto Condensed Italic"
         ],
@@ -3856,7 +3867,7 @@
         ]
       ],
       "layout": {
-        "text-field": "{name_fr}",
+        "text-field": "{name_en}",
         "text-font": [
           "Roboto Condensed Italic"
         ],
@@ -3899,7 +3910,7 @@
         ]
       ],
       "layout": {
-        "text-field": "{name_fr}",
+        "text-field": "{name_en}",
         "text-font": [
           "Roboto Condensed Italic"
         ],
