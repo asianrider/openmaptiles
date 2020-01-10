@@ -117,7 +117,8 @@ indoor INT, bicycle TEXT, foot TEXT, horse TEXT, mtb_scale TEXT, surface TEXT) A
 
         -- etldoc: osm_highway_linestring_gen2  ->  layer_transportation:z9
         -- etldoc: osm_highway_linestring_gen2  ->  layer_transportation:z10
-        -- etldoc: osm_highway_linestring_gen1  ->  layer_transportation:z11        SELECT
+        -- etldoc: osm_highway_linestring_gen1  ->  layer_transportation:z11
+        SELECT
             osm_id, geometry,
             highway, construction, NULL AS railway, NULL AS aerialway, NULL AS shipway,
             NULL AS public_transport, NULL AS service,

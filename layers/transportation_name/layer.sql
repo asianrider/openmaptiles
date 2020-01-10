@@ -4,12 +4,11 @@
 
 CREATE OR REPLACE FUNCTION layer_transportation_name(bbox geometry, zoom_level integer)
 RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text,
-  name_de text, tags hstore, ref text, ref_length int, network text, class
+  tags hstore, ref text, ref_length int, network text, class
   text, subclass text, layer INT, level INT, indoor INT) AS $$
     SELECT osm_id, geometry,
       NULLIF(name, '') AS name,
       COALESCE(NULLIF(name_en, ''), name) AS name_en,
-      COALESCE(NULLIF(name_de, ''), name, name_en) AS name_de,
       tags,
       NULLIF(ref, ''), NULLIF(LENGTH(ref), 0) AS ref_length,
       --TODO: The road network of the road is not yet implemented

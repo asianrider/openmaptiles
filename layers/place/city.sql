@@ -47,5 +47,6 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, tags hs
        OR (zoom_level = 8 AND (gridrank <= 8 OR "rank" IS NOT NULL))
        OR (zoom_level = 9 AND (gridrank <= 12 OR "rank" IS NOT NULL))
        OR (zoom_level BETWEEN 10 AND 11 AND (gridrank <= 14 OR "rank" IS NOT NULL))
-       OR (zoom_level >= 12);
+       OR (zoom_level >= 12)
+  ) as city_all;
 $$ LANGUAGE SQL IMMUTABLE;
