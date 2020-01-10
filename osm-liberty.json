@@ -22,10 +22,10 @@
     },
     "u88szdde1": {
       "type": "vector",
-      "tiles_local": [
+      "tiles": [
         "http://localhost:8080/data/v3/{z}/{x}/{y}.pbf"
       ],
-      "tiles": [
+      "tiles_xx": [
         "http://165.227.154.120:8080/data/v3/{z}/{x}/{y}.pbf"
       ],
       "minZoom": 0,

@@ -143,6 +143,8 @@ start-tileserver:
 	@echo "* "
 	@echo "***********************************************************"
 	@echo " "
+	cp config.json data/
+	cp osm-liberty.json data/
 	docker run $(DC_OPTS) -it --name tileserver-gl -v $$(pwd)/data:/data -p 8080:80 klokantech/tileserver-gl
 
 .PHONY: start-postserve
