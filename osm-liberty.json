@@ -1270,7 +1270,7 @@
       }
     },
     {
-      "id": "road_service_track_casing",
+      "id": "road_service_track_casing_paved",
       "type": "line",
       "metadata": {},
       "source": "u88szdde1",
@@ -1286,6 +1286,11 @@
           "tunnel"
         ],
         [
+          "==",
+          "surface",
+          "paved"
+        ],
+        [
           "in",
           "class",
           "service",
@@ -1298,7 +1303,65 @@
         "visibility": "visible"
       },
       "paint": {
-        "line-color": "rgba(115, 112, 112, 1)",
+        "line-color": "rgba(0, 0, 255, 1)",
+        "line-width": {
+          "base": 1.2,
+          "stops": [
+            [
+              7.9,
+              0
+            ],
+            [
+              8.5,
+              0.5
+            ],
+            [
+              11,
+              2.5
+            ],
+            [
+              20,
+              17
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "road_service_track_casing_unpaved",
+      "type": "line",
+      "metadata": {},
+      "source": "u88szdde1",
+      "source-layer": "transportation",
+      "minzoom": 8,
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        [
+          "!in",
+          "brunnel",
+          "bridge",
+          "tunnel"
+        ],
+        [
+          "==",
+          "surface",
+          "unpaved"
+        ],
+        [
+          "in",
+          "class",
+          "service",
+          "track"
+        ]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(0, 255, 0, 1)",
         "line-width": {
           "base": 1.2,
           "stops": [
@@ -3589,7 +3652,7 @@
       "metadata": {},
       "source": "u88szdde1",
       "source-layer": "place",
-      "minzoom": 5,
+      "minzoom": 3,
       "filter": [
         "all",
         [
@@ -3655,7 +3718,7 @@
       "metadata": {},
       "source": "u88szdde1",
       "source-layer": "place",
-      "minzoom": 5,
+      "minzoom": 3,
       "filter": [
         "all",
         [
