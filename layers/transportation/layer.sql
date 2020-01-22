@@ -128,23 +128,7 @@ indoor INT, bicycle TEXT, foot TEXT, horse TEXT, mtb_scale TEXT, surface TEXT) A
             bicycle, foot, horse, mtb_scale,
             NULL AS surface, z_order
         FROM osm_highway_linestring_gen2
-        WHERE zoom_level BETWEEN 9 AND 10
-          AND st_length(geometry)>zres(11)
-        UNION ALL
-
-        -- etldoc: osm_highway_linestring_gen1  ->  layer_transportation:z11
-        SELECT
-            osm_id, geometry,
-            highway, construction, NULL AS railway, NULL AS aerialway, NULL AS shipway,
-            NULL AS public_transport, NULL AS service,
-            NULL::boolean AS is_bridge, NULL::boolean AS is_tunnel,
-            NULL::boolean AS is_ford,
-            NULL::boolean AS is_ramp, NULL::int AS is_oneway, NULL as man_made,
-            layer, NULL::int AS level, NULL::boolean AS indoor,
-            bicycle, foot, horse, mtb_scale,
-            NULL AS surface, z_order
-        FROM osm_highway_linestring_gen1
-        WHERE zoom_level = 11
+        WHERE zoom_level BETWEEN 9 AND 11
           AND st_length(geometry)>zres(12)
         UNION ALL
 
@@ -169,12 +153,12 @@ indoor INT, bicycle TEXT, foot TEXT, horse TEXT, mtb_scale TEXT, surface TEXT) A
         FROM osm_highway_linestring
         WHERE NOT is_area AND (
             zoom_level = 12 AND (
-                highway_class(highway, public_transport, construction) NOT IN ('track', 'path', 'minor')
+                highway_class(highway, public_transport, construction) NOT IN ('path')
                 OR highway IN ('unclassified', 'residential')
             ) AND man_made <> 'pier'
             OR zoom_level = 13
                 AND (
-                    highway_class(highway, public_transport, construction) NOT IN ('track', 'path') AND man_made <> 'pier'
+                    highway_class(highway, public_transport, construction) NOT IN ('path') AND man_made <> 'pier'
                 OR
                     man_made = 'pier' AND NOT ST_IsClosed(geometry)
                 )
@@ -314,7 +298,7 @@ indoor INT, bicycle TEXT, foot TEXT, horse TEXT, mtb_scale TEXT, surface TEXT) A
             NULL as bicycle, NULL as foot, NULL as horse, NULL as mtb_scale,
             NULL AS surface, z_order
         FROM osm_shipway_linestring_gen2
-        WHERE zoom_level = 11
+        WHERE zoom_level = 8
         UNION ALL
 
         -- etldoc: osm_shipway_linestring_gen1  ->  layer_transportation:z12
@@ -327,7 +311,7 @@ indoor INT, bicycle TEXT, foot TEXT, horse TEXT, mtb_scale TEXT, surface TEXT) A
             NULL as bicycle, NULL as foot, NULL as horse, NULL as mtb_scale,
             NULL AS surface, z_order
         FROM osm_shipway_linestring_gen1
-        WHERE zoom_level = 12
+        WHERE zoom_level BETWEEN 9 AND 12
         UNION ALL
 
         -- etldoc: osm_shipway_linestring       ->  layer_transportation:z13
