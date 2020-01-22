@@ -26,6 +26,20 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, tags hs
             ORDER BY CASE WHEN name = '' THEN 2000 ELSE poi_class_rank(poi_class(subclass, mapping_key)) END ASC
         )::int AS "rank"
     FROM (
+        SELECT *,
+            osm_id*10 AS osm_id_hash FROM osm_poi_point
+            WHERE geometry && bbox
+                AND zoom_level BETWEEN 6 AND 13
+                AND mapping_key='barrier'
+        UNION ALL
+
+        SELECT *,
+            osm_id*10 AS osm_id_hash FROM osm_poi_point
+            WHERE geometry && bbox
+                AND zoom_level BETWEEN 8 AND 13
+                AND subclass='fuel'
+        UNION ALL
+
         -- etldoc: osm_poi_point ->  layer_poi:z12
         -- etldoc: osm_poi_point ->  layer_poi:z13
         SELECT *,

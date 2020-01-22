@@ -69,9 +69,19 @@ def_poi_mapping_barrier: &poi_mapping_barrier
   - cycle_barrier
   - gate
   - lift_gate
+  - sliding_gate
+  - swing_gate
   - sally_port
   - stile
   - toll_booth
+  - block
+  - bump_gate
+  - bus_trap
+  - cattle_grid
+  - chain
+  - motorcycle_barrier
+  - debris
+  - entrance
 
 # building values , see http://taginfo.openstreetmap.org/keys/building#values
 def_poi_mapping_building: &poi_mapping_building

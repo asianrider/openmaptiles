@@ -74,7 +74,7 @@ fi
 echo " "
 echo "-------------------------------------------------------------------------------------"
 echo "====> : Pulling or refreshing OpenMapTiles docker images "
-make refresh-docker-images
+# make refresh-docker-images
 
 
 #####  backup log from here ...
