@@ -65,7 +65,7 @@ CREATE OR REPLACE FUNCTION layer_waterway(bbox geometry, zoom_level int)
 RETURNS TABLE(geometry geometry, class text, name text, name_en text, brunnel text, intermittent int, tags hstore) AS $$
     SELECT geometry, class,
         NULLIF(name, '') AS name,
-        COALESCE(NULLIF(name_en, ''), name) AS name_en,
+        COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
         waterway_brunnel(is_bridge, is_tunnel) AS brunnel,
         is_intermittent::int AS intermittent,
         tags

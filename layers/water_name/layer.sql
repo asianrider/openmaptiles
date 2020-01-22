@@ -11,7 +11,7 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, tags hs
         ELSE osm_id*10+1
     END AS osm_id_hash,
     geometry, name,
-    COALESCE(NULLIF(name_en, ''), name) AS name_en,
+    COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
     tags,
     'lake'::text AS class,
     is_intermittent::int AS intermittent
@@ -41,7 +41,7 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, tags hs
     -- etldoc: osm_marine_point ->  layer_water_name:z14_
     UNION ALL
     SELECT osm_id*10, geometry, name,
-    COALESCE(NULLIF(name_en, ''), name) AS name_en,
+    COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
     tags,
     place::text AS class,
     is_intermittent::int AS intermittent
