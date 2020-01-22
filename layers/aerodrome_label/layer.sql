@@ -22,7 +22,7 @@ $$
     osm_id,
     geometry,
     name,
-    COALESCE(NULLIF(name_en, ''), name) AS name_en,
+    COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
     tags,
     CASE
       %%FIELD_MAPPING: class %%
