@@ -8,7 +8,7 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text,
   text, subclass text, layer INT, level INT, indoor INT) AS $$
     SELECT osm_id, geometry,
       NULLIF(name, '') AS name,
-      COALESCE(NULLIF(name_en, ''), name) AS name_en,
+      COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
       tags,
       NULLIF(ref, ''), NULLIF(LENGTH(ref), 0) AS ref_length,
       --TODO: The road network of the road is not yet implemented

@@ -29,7 +29,7 @@ $$
     ele_ft::int, 
     rank::int FROM (
       SELECT osm_id, geometry, name,
-      COALESCE(NULLIF(name_en, ''), name) AS name_en,
+      COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
       tags,
       substring(ele from E'^(-?\\d+)(\\D|$)')::int AS ele,
       round(substring(ele from E'^(-?\\d+)(\\D|$)')::int*3.2808399)::int AS ele_ft,

@@ -5,7 +5,7 @@
 CREATE OR REPLACE FUNCTION layer_poi(bbox geometry, zoom_level integer, pixel_width numeric)
 RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text, tags hstore, class text, subclass text, agg_stop integer, layer integer, level integer, indoor integer, "rank" int) AS $$
     SELECT osm_id_hash AS osm_id, geometry, NULLIF(name, '') AS name,
-        COALESCE(NULLIF(name_en, ''), name) AS name_en,
+        COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
         tags,
         poi_class(subclass, mapping_key) AS class,
         CASE

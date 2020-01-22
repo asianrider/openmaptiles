@@ -55,7 +55,7 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text,
     -- etldoc: osm_island_point    -> layer_place:z12_14
     SELECT
         osm_id*10, geometry, name,
-        COALESCE(NULLIF(name_en, ''), name) AS name_en,
+        COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
         tags,
         'island' AS class, 7 AS "rank", NULL::int AS capital,
         NULL::text AS iso_a2
@@ -68,7 +68,7 @@ RETURNS TABLE(osm_id bigint, geometry geometry, name text, name_en text,
     -- etldoc: osm_island_polygon  -> layer_place:z12_14
     SELECT
         osm_id*10, geometry, name,
-        COALESCE(NULLIF(name_en, ''), name) AS name_en,
+        COALESCE(NULLIF(name_en, ''), tags->'name:latin', name) AS name_en,
         tags,
         'island' AS class, island_rank(area) AS "rank", NULL::int AS capital,
         NULL::text AS iso_a2
